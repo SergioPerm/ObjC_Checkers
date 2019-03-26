@@ -12,12 +12,18 @@
 
 @interface ViewController ()
 
+@property (weak, nonatomic) UIView* viewDesk;
+@property (assign, nonatomic) CGPoint startTouchPoint;
+
+
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
     
     [self createDesk];
     
@@ -91,6 +97,35 @@
         checkerFrame.origin.y += CGRectGetWidth(checkerFrame);
         
     }
+    
+}
+
+#pragma mark - touches
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+
+    UITouch* anyTouch = [touches anyObject];
+    CGPoint pointTouchView = [anyTouch locationInView:self.viewDesk];
+    
+    UIView* anyTouchView = [self.viewDesk hitTest:pointTouchView withEvent:event];
+    
+    self.startTouchPoint = pointTouchView;
+    
+    
+    
+    
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
+    
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
+    
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
+    
     
 }
 

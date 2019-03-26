@@ -64,7 +64,33 @@
         cellFrame.origin.y += CGRectGetWidth(cellFrame);
     }
     
-    CheckerView* checker = [[CheckerView alloc] initWithFrameAndStatus:CGRectMake(0, 0, 40, 40) andStatus:@"white"];
+    NSString* statusChecker;
+    CGRect checkerFrame = CGRectMake(cellLength, 0, cellLength, cellLength);
+    
+    for (int i = 0; i < 8; i++) {
+        
+        if (i < 3) {
+            statusChecker = @"white";
+        } else if (i > 4) {
+            statusChecker = @"black";
+        } else {
+            checkerFrame.origin.y += cellLength;
+            continue;
+        }
+        
+        for (int j = 0; j < 4; j++) {
+            
+            CheckerView* checker = [[CheckerView alloc] initWithFrameAndStatus:checkerFrame andStatus:statusChecker];
+            [viewDesk addSubview:checker];
+            
+            checkerFrame.origin.x += 2 * CGRectGetWidth(checkerFrame);
+            
+        }
+        
+        !(i%2) ? (checkerFrame.origin.x = 0) : (checkerFrame.origin.x = CGRectGetWidth(checkerFrame));
+        checkerFrame.origin.y += CGRectGetWidth(checkerFrame);
+        
+    }
     
 }
 

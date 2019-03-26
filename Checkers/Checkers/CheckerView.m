@@ -15,7 +15,19 @@
     self = [super initWithFrame:frame];
     if (self) {
         
-        //if (statusChecker is)
+        UIImage* imageCheker = [[UIImage alloc] init];
+        
+        if ([statusChecker isEqualToString:@"white"]) {
+            imageCheker = [UIImage imageNamed:@"checkerWhite.png"];
+        } else {
+            imageCheker = [UIImage imageNamed:@"checkerBlack.png"];
+        }
+        
+        UIImageView* imageCheckerView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetWidth(frame))];
+        imageCheckerView.image = imageCheker;
+        
+        self.backgroundColor = [UIColor clearColor];
+        [self addSubview:imageCheckerView];
         
     }
     return self;

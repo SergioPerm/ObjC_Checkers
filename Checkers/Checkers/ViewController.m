@@ -14,7 +14,9 @@
 
 @property (weak, nonatomic) UIView* viewDesk;
 @property (assign, nonatomic) CGPoint startTouchPoint;
-
+@property (strong, nonatomic) NSMutableArray* checkersArray;
+@property (weak, nonatomic) UIView* dragingView;
+@property (assign, nonatomic) CGPoint touchOffset;
 
 @end
 
@@ -73,6 +75,8 @@
     NSString* statusChecker;
     CGRect checkerFrame = CGRectMake(cellLength, 0, cellLength, cellLength);
     
+    self.checkersArray = [[NSMutableArray alloc] init];
+    
     for (int i = 0; i < 8; i++) {
         
         if (i < 3) {
@@ -88,6 +92,7 @@
             
             CheckerView* checker = [[CheckerView alloc] initWithFrameAndStatus:checkerFrame andStatus:statusChecker];
             [viewDesk addSubview:checker];
+            [self.checkersArray addObject:checker];
             
             checkerFrame.origin.x += 2 * CGRectGetWidth(checkerFrame);
             
@@ -98,6 +103,24 @@
         
     }
     
+    self.viewDesk = viewDesk;
+    
+}
+
+- (BOOL) isCheckerView: (UIView*) touchView {
+    
+    BOOL touchViewIsChecker = false;
+    
+    for (UIView* anyView in self.checkersArray) {
+        
+        if ([anyView isEqual:touchView]) {
+            touchViewIsChecker = true;
+            break;
+        }
+        
+    }
+    
+    return touchViewIsChecker;
 }
 
 #pragma mark - touches
@@ -110,6 +133,22 @@
     UIView* anyTouchView = [self.viewDesk hitTest:pointTouchView withEvent:event];
     
     self.startTouchPoint = pointTouchView;
+    
+    if ([self isCheckerView:anyTouchView]) {
+        
+        self.dragingView = anyTouchView;
+        
+        [UIView animateWithDuration:.3f animations:^{
+            self.dragingView.transform = CGAffineTransformMakeScale(1.5f, 1.5f);
+        }];
+        
+        [self.viewDesk bringSubviewToFront:self.dragingView];
+        
+        CGPoint touchPoint = [anyTouch locationInView:self.dragingView];
+        self.touchOffset = CGPointMake(CGRectGetMidX(self.dragingView.bounds) - touchPoint.x,
+                                       CGRectGetMidY(self.dragingView.bounds) - touchPoint.y);
+        
+    }
     
     
     

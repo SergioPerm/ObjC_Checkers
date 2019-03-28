@@ -14,8 +14,13 @@
 
 @property (weak, nonatomic) UIView* viewDesk;
 @property (assign, nonatomic) CGPoint startTouchPoint;
+
 @property (strong, nonatomic) NSMutableArray* checkersArray;
+@property (strong, nonatomic) NSMutableArray* blackCellsArray;
+
 @property (weak, nonatomic) UIView* dragingView;
+@property (weak, nonatomic) UIView* currentBlackCell;
+
 @property (assign, nonatomic) CGPoint touchOffset;
 
 @end
@@ -57,12 +62,15 @@
     
     CGRect cellFrame = CGRectMake(cellLength, 0, cellLength, cellLength);
     
+    self.blackCellsArray = [[NSMutableArray alloc] init];
+    
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 4; j++) {
         
             BlackCellView* blackCell = [[BlackCellView alloc] initWithFrame:cellFrame];
             
             [viewDesk addSubview:blackCell];
+            [self.blackCellsArray addObject:blackCell];
             
             cellFrame.origin.x += 2 * CGRectGetWidth(cellFrame);
             
@@ -123,6 +131,45 @@
     return touchViewIsChecker;
 }
 
+- (UIView*) searchNearBlackCellAndBackLight: (UIView*) checkerView {
+    
+    UIView* cellView = [[UIView alloc] init];
+
+    CGPoint checkerCenter = checkerView.center;
+    
+    NSMutableArray *distancePoints = [[NSMutableArray alloc] initWithCapacity:32];
+    
+    CGFloat minDistance = 1000;
+    
+    for (UIView* blackCellView in self.blackCellsArray) {
+        
+        CGFloat diffX = checkerCenter.x - blackCellView.center.x;
+        diffX = diffX > 0 ? diffX : -diffX;
+        
+        CGFloat diffY = checkerCenter.y - blackCellView.center.y;
+        diffY = diffY > 0 ? diffY : -diffY;
+        
+        CGFloat currentDist = diffX + diffY;
+        
+        if (currentDist < minDistance) {
+            minDistance = currentDist;
+            cellView = blackCellView;
+        }
+
+        blackCellView.backgroundColor = [UIColor blackColor];
+        blackCellView.layer.borderWidth = 0.f;
+        blackCellView.layer.borderColor = [UIColor clearColor].CGColor;
+        
+    }
+    
+    cellView.backgroundColor = [UIColor whiteColor];
+    cellView.layer.borderColor = [UIColor redColor].CGColor;
+    cellView.layer.borderWidth = 3.f;
+    
+    return cellView;
+    
+}
+
 #pragma mark - touches
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
@@ -139,7 +186,7 @@
         self.dragingView = anyTouchView;
         
         [UIView animateWithDuration:.3f animations:^{
-            self.dragingView.transform = CGAffineTransformMakeScale(1.5f, 1.5f);
+            self.dragingView.transform = CGAffineTransformMakeScale(1.3f, 1.3f);
         }];
         
         [self.viewDesk bringSubviewToFront:self.dragingView];
@@ -150,22 +197,44 @@
         
     }
     
-    
-    
-    
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
+    
+    if (self.dragingView) {
+        
+        UITouch* anyTouch = [touches anyObject];
+        
+        CGPoint pointTouchView = [anyTouch locationInView:self.viewDesk];
+        
+        CGPoint correctionPoint = CGPointMake(pointTouchView.x + self.touchOffset.x, pointTouchView.y + self.touchOffset.y);
+        
+        self.dragingView.center = correctionPoint;
+        
+        self.currentBlackCell = [self searchNearBlackCellAndBackLight:self.dragingView];
+        
+    }
     
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
     
+    [UIView animateWithDuration:.3f animations:^{
+        self.dragingView.transform = CGAffineTransformIdentity;
+        
+    }];
+    
+    self.dragingView.center = self.currentBlackCell.center;
+    self.currentBlackCell.backgroundColor = [UIColor blackColor];
+    
+    self.dragingView = nil;
+    self.currentBlackCell = nil;
+    
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
     
-    
+    self.dragingView = nil;
 }
 
 @end

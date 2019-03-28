@@ -15,11 +15,11 @@
 		8BCD7B462244EA0C0016D8B7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BCD7B452244EA0C0016D8B7 /* main.m */; };
 		8BCD7B502244EA0C0016D8B7 /* CheckersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BCD7B4F2244EA0C0016D8B7 /* CheckersTests.m */; };
 		8BCD7B5B2244EA0C0016D8B7 /* CheckersUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BCD7B5A2244EA0C0016D8B7 /* CheckersUITests.m */; };
+		8BCD7B70224CAB5A0016D8B7 /* blackCkecker.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BCD7B6E224CAB5A0016D8B7 /* blackCkecker.png */; };
+		8BCD7B71224CAB5A0016D8B7 /* whiteChecker.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BCD7B6F224CAB5A0016D8B7 /* whiteChecker.png */; };
 		B1D784F6224657FF0028ECA3 /* desk.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B1D784F5224657FF0028ECA3 /* desk.jpg */; };
 		B1D784F9224678C90028ECA3 /* BlackCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D784F8224678C90028ECA3 /* BlackCellView.m */; };
 		B1D784FC22467FCD0028ECA3 /* CheckerView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D784FB22467FCD0028ECA3 /* CheckerView.m */; };
-		B1D784FE22468BAE0028ECA3 /* checkerBlack.png in Resources */ = {isa = PBXBuildFile; fileRef = B1D784FD22468BAD0028ECA3 /* checkerBlack.png */; };
-		B1D7850022468BC20028ECA3 /* checkerWhite.png in Resources */ = {isa = PBXBuildFile; fileRef = B1D784FF22468BC20028ECA3 /* checkerWhite.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,13 +56,13 @@
 		8BCD7B562244EA0C0016D8B7 /* CheckersUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CheckersUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BCD7B5A2244EA0C0016D8B7 /* CheckersUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CheckersUITests.m; sourceTree = "<group>"; };
 		8BCD7B5C2244EA0C0016D8B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8BCD7B6E224CAB5A0016D8B7 /* blackCkecker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blackCkecker.png; path = ../../../../../../../../Downloads/blackCkecker.png; sourceTree = "<group>"; };
+		8BCD7B6F224CAB5A0016D8B7 /* whiteChecker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whiteChecker.png; path = ../../../../../../../../Downloads/whiteChecker.png; sourceTree = "<group>"; };
 		B1D784F5224657FF0028ECA3 /* desk.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = desk.jpg; sourceTree = "<group>"; };
 		B1D784F7224678C90028ECA3 /* BlackCellView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlackCellView.h; sourceTree = "<group>"; };
 		B1D784F8224678C90028ECA3 /* BlackCellView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlackCellView.m; sourceTree = "<group>"; };
 		B1D784FA22467FCD0028ECA3 /* CheckerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CheckerView.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		B1D784FB22467FCD0028ECA3 /* CheckerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CheckerView.m; sourceTree = "<group>"; };
-		B1D784FD22468BAD0028ECA3 /* checkerBlack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkerBlack.png; sourceTree = "<group>"; };
-		B1D784FF22468BC20028ECA3 /* checkerWhite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkerWhite.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,8 +152,8 @@
 		8BCD7B6A2244EF970016D8B7 /* images */ = {
 			isa = PBXGroup;
 			children = (
-				B1D784FD22468BAD0028ECA3 /* checkerBlack.png */,
-				B1D784FF22468BC20028ECA3 /* checkerWhite.png */,
+				8BCD7B6E224CAB5A0016D8B7 /* blackCkecker.png */,
+				8BCD7B6F224CAB5A0016D8B7 /* whiteChecker.png */,
 				B1D784F5224657FF0028ECA3 /* desk.jpg */,
 			);
 			path = images;
@@ -263,11 +263,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				8BCD7B432244EA0C0016D8B7 /* LaunchScreen.storyboard in Resources */,
+				8BCD7B71224CAB5A0016D8B7 /* whiteChecker.png in Resources */,
 				8BCD7B402244EA0C0016D8B7 /* Assets.xcassets in Resources */,
+				8BCD7B70224CAB5A0016D8B7 /* blackCkecker.png in Resources */,
 				B1D784F6224657FF0028ECA3 /* desk.jpg in Resources */,
-				B1D784FE22468BAE0028ECA3 /* checkerBlack.png in Resources */,
 				8BCD7B3E2244EA0B0016D8B7 /* Main.storyboard in Resources */,
-				B1D7850022468BC20028ECA3 /* checkerWhite.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

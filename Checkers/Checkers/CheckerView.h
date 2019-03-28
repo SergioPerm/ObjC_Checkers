@@ -9,12 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "BlackCellView.h"
+#import "Constants.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CheckerView : UIView
 
 @property (weak, nonatomic) BlackCellView* currentCell;
+//@property (assign, nonatomic) NSString
 
 - (id)initWithFrameAndStatus:(CGRect)frame andStatus:(NSString*) statusChecker;
 

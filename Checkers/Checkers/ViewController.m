@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "BlackCellView.h"
 #import "CheckerView.h"
+#import "StatusBar.h"
 
 @interface ViewController ()
 
@@ -23,6 +24,8 @@
 
 @property (assign, nonatomic) CGPoint touchOffset;
 
+@property (strong, nonatomic) StatusBar* statusBar;
+
 @end
 
 @implementation ViewController
@@ -30,9 +33,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
-    
+    [self createStatusBar];
     [self createDesk];
+    
+    self.statusBar.moveStatus = @"white";
+    
+}
+
+#pragma mark - create status bar
+
+- (void) createStatusBar {
+    
+    self.statusBar = [[StatusBar alloc] initWithFrame:CGRectMake(10, 30, CGRectGetWidth(self.view.frame) * 0.9f, 30)];
+    
+    [self.view addSubview:self.statusBar];
     
 }
 
@@ -40,7 +54,7 @@
 
 - (void) createDesk {
     
-    self.view.backgroundColor = [UIColor blackColor];
+    self.view.backgroundColor = [UIColor colorWithRed:34.0/255.0 green:34.0/255.0 blue:51.0/255.0 alpha:1.0];
     
     CGFloat originYDesk = CGRectGetMidY(self.view.frame) - (CGRectGetWidth(self.view.frame)/2);
     CGFloat sideLength = CGRectGetWidth(self.view.frame);
@@ -133,6 +147,8 @@
     self.viewDesk = viewDesk;
     
 }
+
+#pragma mark - game logic
 
 - (BOOL) isCheckerView: (UIView*) touchView {
     

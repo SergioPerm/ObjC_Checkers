@@ -20,7 +20,7 @@
         if ([statusChecker isEqualToString:@"white"]) {
             imageCheker = [UIImage imageNamed:@"whiteChecker.png"];
         } else {
-            imageCheker = [UIImage imageNamed:@"blackCkecker.png"];
+            imageCheker = [UIImage imageNamed:@"blackChecker.png"];
         }
         
         UIImageView* imageCheckerView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetWidth(frame))];

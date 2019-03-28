@@ -137,8 +137,6 @@
 
     CGPoint checkerCenter = checkerView.center;
     
-    NSMutableArray *distancePoints = [[NSMutableArray alloc] initWithCapacity:32];
-    
     CGFloat minDistance = 1000;
     
     for (UIView* blackCellView in self.blackCellsArray) {

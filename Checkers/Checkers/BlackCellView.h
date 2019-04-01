@@ -13,6 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface BlackCellView : UIView
 
+@property (assign, nonatomic) CGPoint coordinates;
+@property (assign, nonatomic) BOOL greenLight;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -18,8 +18,8 @@
 @property (strong, nonatomic) NSMutableArray* checkersArray;
 @property (strong, nonatomic) NSMutableArray* blackCellsArray;
 
-@property (weak, nonatomic) UIView* dragingView;
-@property (weak, nonatomic) UIView* currentBlackCell;
+@property (weak, nonatomic) CheckerView* dragingView;
+@property (weak, nonatomic) BlackCellView* currentBlackCell;
 
 @property (assign, nonatomic) CGPoint touchOffset;
 
@@ -64,10 +64,22 @@
     
     self.blackCellsArray = [[NSMutableArray alloc] init];
     
+    int k = 0;
+    int l = 0;
+    
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 4; j++) {
         
             BlackCellView* blackCell = [[BlackCellView alloc] initWithFrame:cellFrame];
+            
+            k = l + 1;
+            l++;
+            
+//            0 1 2 3
+//            1 3 5 7
+//            2 4 6 8
+            
+            blackCell.coordinates = CGPointMake(j + k,i + 1);
             
             [viewDesk addSubview:blackCell];
             [self.blackCellsArray addObject:blackCell];
@@ -77,6 +89,9 @@
         }
         
         !(i%2) ? (cellFrame.origin.x = 0) : (cellFrame.origin.x = CGRectGetWidth(cellFrame));
+        
+        !(i%2) ? (l = 0) : (l = 1);
+        
         cellFrame.origin.y += CGRectGetWidth(cellFrame);
     }
     
@@ -99,6 +114,10 @@
         for (int j = 0; j < 4; j++) {
             
             CheckerView* checker = [[CheckerView alloc] initWithFrameAndStatus:checkerFrame andStatus:statusChecker];
+            
+            BlackCellView* currentCell = [self searchNearBlackCellAndBackLight:checker withBackLight:false];
+            checker.currentCell = currentCell;
+            
             [viewDesk addSubview:checker];
             [self.checkersArray addObject:checker];
             
@@ -131,15 +150,63 @@
     return touchViewIsChecker;
 }
 
-- (UIView*) searchNearBlackCellAndBackLight: (UIView*) checkerView {
+- (BOOL) cellIsFree: (BlackCellView*) cellView {
     
-    UIView* cellView = [[UIView alloc] init];
+    for (CheckerView* checker in self.checkersArray) {
+        
+        if ([cellView isEqual:checker.currentCell]) {
+            return false;
+        }
+        
+    }
+    
+    return true;
+    
+}
 
+- (void) markFreeCells: (CGPoint) currentCoordinates {
+    
+    NSMutableArray* checkCoordinatesArray = [[NSMutableArray alloc] init];
+    
+    //check two lines
+    [checkCoordinatesArray addObject:[NSValue valueWithCGPoint:CGPointMake(currentCoordinates.x-1, currentCoordinates.y-1)]];
+    [checkCoordinatesArray addObject:[NSValue valueWithCGPoint:CGPointMake(currentCoordinates.x-1, currentCoordinates.y+1)]];
+    [checkCoordinatesArray addObject:[NSValue valueWithCGPoint:CGPointMake(currentCoordinates.x+1, currentCoordinates.y-1)]];
+    [checkCoordinatesArray addObject:[NSValue valueWithCGPoint:CGPointMake(currentCoordinates.x+1, currentCoordinates.y+1)]];
+    
+    BlackCellView* cellView = nil;
+    
+    for (int i = 0; i < [self.blackCellsArray count]; i++) {
+        
+        cellView = [self.blackCellsArray objectAtIndex:i];
+        
+        if ([checkCoordinatesArray containsObject:[NSValue valueWithCGPoint:cellView.coordinates]]) {
+            if ([self cellIsFree:cellView]) {
+                cellView.greenLight = true;
+            }
+        }
+        
+    }
+    
+}
+
+- (void) deleteMarkFreeCells {
+    
+    for (BlackCellView* cellView in self.blackCellsArray) {
+        cellView.greenLight = false;
+    }
+    
+}
+
+- (BlackCellView*) searchNearBlackCellAndBackLight: (CheckerView*) checkerView withBackLight:(BOOL) backLight {
+    
+    BlackCellView* cellView;
+    
     CGPoint checkerCenter = checkerView.center;
     
     CGFloat minDistance = 1000;
     
-    for (UIView* blackCellView in self.blackCellsArray) {
+    for (BlackCellView* blackCellView in self.blackCellsArray) {
         
         CGFloat diffX = checkerCenter.x - blackCellView.center.x;
         diffX = diffX > 0 ? diffX : -diffX;
@@ -160,9 +227,11 @@
         
     }
     
-    cellView.backgroundColor = [UIColor whiteColor];
-    cellView.layer.borderColor = [UIColor redColor].CGColor;
-    cellView.layer.borderWidth = 3.f;
+    if (backLight) {
+        cellView.backgroundColor = [UIColor whiteColor];
+        cellView.layer.borderColor = [UIColor redColor].CGColor;
+        cellView.layer.borderWidth = 3.f;
+    }
     
     return cellView;
     
@@ -175,7 +244,7 @@
     UITouch* anyTouch = [touches anyObject];
     CGPoint pointTouchView = [anyTouch locationInView:self.viewDesk];
     
-    UIView* anyTouchView = [self.viewDesk hitTest:pointTouchView withEvent:event];
+    CheckerView* anyTouchView = (CheckerView*)[self.viewDesk hitTest:pointTouchView withEvent:event];
     
     self.startTouchPoint = pointTouchView;
     
@@ -209,7 +278,8 @@
         
         self.dragingView.center = correctionPoint;
         
-        self.currentBlackCell = [self searchNearBlackCellAndBackLight:self.dragingView];
+        self.currentBlackCell = [self searchNearBlackCellAndBackLight:self.dragingView withBackLight:true];
+        [self markFreeCells:self.dragingView.currentCell.coordinates];
         
     }
     
@@ -222,11 +292,19 @@
         
     }];
     
-    self.dragingView.center = self.currentBlackCell.center;
+    if (!self.currentBlackCell.greenLight) {
+        self.dragingView.center = self.dragingView.currentCell.center;
+    } else {
+        self.dragingView.center = self.currentBlackCell.center;
+        self.dragingView.currentCell = self.currentBlackCell;
+    }
+
     self.currentBlackCell.backgroundColor = [UIColor blackColor];
     
     self.dragingView = nil;
     self.currentBlackCell = nil;
+    
+    [self deleteMarkFreeCells];
     
 }
 

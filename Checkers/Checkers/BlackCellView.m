@@ -22,4 +22,16 @@
     return self;
 }
 
+- (void) setGreenLight:(BOOL)greenLight {
+    
+    _greenLight = greenLight;
+    
+    if (greenLight) {
+        self.backgroundColor = [UIColor greenColor];
+    } else {
+        self.backgroundColor = [UIColor blackColor];
+    }
+    
+}
+
 @end

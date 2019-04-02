@@ -30,13 +30,25 @@
     return self;
 }
 
-- (void) setMoveStatus:(NSString *)moveStatus {
+- (void) setMoveStatus:(CheckerType) moveStatus {
     
-    if ([moveStatus isEqualToString:@"white"]) {
+    if (moveStatus == WHITE) {
         [_textLabel setText:@"WHITE'S MOVE!"];
-    } else {
+    } else if (moveStatus == BLACK) {
         [_textLabel setText:@"BLACK MOVE!"];
     }
+    
+}
+
+- (void) changePlayer {
+    
+    if (self.moveStatus == WHITE) {
+        _moveStatus = BLACK;
+    } else {
+        _moveStatus = WHITE;
+    }
+    
+    [self setMoveStatus:self.moveStatus];
     
 }
 

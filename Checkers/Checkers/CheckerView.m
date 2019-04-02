@@ -10,18 +10,20 @@
 
 @implementation CheckerView
 
-- (id)initWithFrameAndStatus:(CGRect)frame andStatus: (NSString*) statusChecker
+- (id)initWithFrameAndStatus:(CGRect)frame andStatus: (CheckerType) statusChecker
 {
     self = [super initWithFrame:frame];
     if (self) {
         
         UIImage* imageCheker = [[UIImage alloc] init];
         
-        if ([statusChecker isEqualToString:@"white"]) {
+        if (statusChecker == WHITE) {
             imageCheker = [UIImage imageNamed:@"whiteChecker.png"];
-        } else {
-            imageCheker = [UIImage imageNamed:@"blackCkecker.png"];
+        } else if (statusChecker == BLACK) {
+            imageCheker = [UIImage imageNamed:@"blackChecker.png"];
         }
+        
+        self.checkerStatus = statusChecker;
         
         UIImageView* imageCheckerView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetWidth(frame))];
         imageCheckerView.image = imageCheker;

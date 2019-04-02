@@ -12,9 +12,9 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-//typedef NS_ENUM CheckerType {
-//    WHITE,
-//    BLACK
-//} CheckerType;
+typedef enum {
+    WHITE,
+    BLACK
+} CheckerType;
 
 #endif /* Constants_h */

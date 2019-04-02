@@ -16,9 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CheckerView : UIView
 
 @property (weak, nonatomic) BlackCellView* currentCell;
-//@property (assign, nonatomic) NSString
+@property (assign, nonatomic) CheckerType checkerStatus;
 
-- (id)initWithFrameAndStatus:(CGRect)frame andStatus:(NSString*) statusChecker;
+- (id)initWithFrameAndStatus:(CGRect)frame andStatus:(CheckerType) statusChecker;
 
 @end
 

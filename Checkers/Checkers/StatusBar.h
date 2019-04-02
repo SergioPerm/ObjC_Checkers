@@ -8,13 +8,16 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "Constants.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface StatusBar : UIView
 
 @property (strong, nonatomic) UILabel* textLabel;
-@property (assign, nonatomic) NSString* moveStatus;
+@property (assign, nonatomic) CheckerType moveStatus;
+
+- (void) changePlayer;
 
 @end
 

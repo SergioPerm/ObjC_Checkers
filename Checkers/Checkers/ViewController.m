@@ -36,7 +36,7 @@
     [self createStatusBar];
     [self createDesk];
     
-    self.statusBar.moveStatus = @"white";
+    self.statusBar.moveStatus = WHITE;
     
 }
 
@@ -79,7 +79,7 @@
     self.blackCellsArray = [[NSMutableArray alloc] init];
     
     int k = 0;
-    int l = 0;
+    int l = 1;
     
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 4; j++) {
@@ -109,7 +109,7 @@
         cellFrame.origin.y += CGRectGetWidth(cellFrame);
     }
     
-    NSString* statusChecker;
+    CheckerType statusChecker;
     CGRect checkerFrame = CGRectMake(cellLength, 0, cellLength, cellLength);
     
     self.checkersArray = [[NSMutableArray alloc] init];
@@ -117,9 +117,9 @@
     for (int i = 0; i < 8; i++) {
         
         if (i < 3) {
-            statusChecker = @"white";
+            statusChecker = WHITE;
         } else if (i > 4) {
-            statusChecker = @"black";
+            statusChecker = BLACK;
         } else {
             checkerFrame.origin.y += cellLength;
             continue;
@@ -166,17 +166,26 @@
     return touchViewIsChecker;
 }
 
-- (BOOL) cellIsFree: (BlackCellView*) cellView {
+- (CheckerView*) cellIsFree: (BlackCellView*) cellView {
     
     for (CheckerView* checker in self.checkersArray) {
         
         if ([cellView isEqual:checker.currentCell]) {
-            return false;
+            return checker;
         }
         
     }
     
-    return true;
+    return nil;
+    
+}
+
+- (CGPoint) calculateAttackWithStartCoordinates: (CGPoint) startCoordinates andVictimCoordinates:(CGPoint) victim {
+    
+    CGPoint moduleAttack = CGPointMake(victim.x - startCoordinates.x, victim.y - startCoordinates.y);
+    CGPoint finishAttack = CGPointMake(victim.x + moduleAttack.x, victim.y + moduleAttack.y);
+    
+    return finishAttack;
     
 }
 
@@ -190,19 +199,37 @@
     [checkCoordinatesArray addObject:[NSValue valueWithCGPoint:CGPointMake(currentCoordinates.x+1, currentCoordinates.y-1)]];
     [checkCoordinatesArray addObject:[NSValue valueWithCGPoint:CGPointMake(currentCoordinates.x+1, currentCoordinates.y+1)]];
     
+    //array for test attack
+    NSMutableArray* checkCoordinatesForFinishAtatck = [[NSMutableArray alloc] init];
+    
     BlackCellView* cellView = nil;
+    CheckerView* checkerTest = nil;
+    
+    /////////////////////////
+    //Write method for calculating cellView from coordinates array, method return cellView array
+    //////////////////////
     
     for (int i = 0; i < [self.blackCellsArray count]; i++) {
         
         cellView = [self.blackCellsArray objectAtIndex:i];
         
         if ([checkCoordinatesArray containsObject:[NSValue valueWithCGPoint:cellView.coordinates]]) {
-            if ([self cellIsFree:cellView]) {
+            
+            checkerTest = [self cellIsFree:cellView];
+            
+            if (!checkerTest) {
                 cellView.greenLight = true;
+            } else if (checkerTest.checkerStatus != self.statusBar.moveStatus) {
+                //test for attack!
+                CGPoint finishAttack = [self calculateAttackWithStartCoordinates:currentCoordinates andVictimCoordinates:cellView.coordinates];
+                
+                [checkCoordinatesForFinishAtatck addObject:[NSValue valueWithCGPoint:finishAttack]];
             }
         }
         
     }
+    
+    
     
 }
 
@@ -266,6 +293,11 @@
     
     if ([self isCheckerView:anyTouchView]) {
         
+        if (self.statusBar.moveStatus != anyTouchView.checkerStatus) {
+            //wrong checker
+            return;
+        }
+        
         self.dragingView = anyTouchView;
         
         [UIView animateWithDuration:.3f animations:^{
@@ -311,8 +343,12 @@
     if (!self.currentBlackCell.greenLight) {
         self.dragingView.center = self.dragingView.currentCell.center;
     } else {
+        //move OK
         self.dragingView.center = self.currentBlackCell.center;
         self.dragingView.currentCell = self.currentBlackCell;
+        
+        //set move end
+        [self.statusBar changePlayer];
     }
 
     self.currentBlackCell.backgroundColor = [UIColor blackColor];
